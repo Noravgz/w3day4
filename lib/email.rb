@@ -6,7 +6,7 @@ begin
   page = Nokogiri::HTML(URI.open("https://lannuaire.service-public.fr/navigation/ile-de-france/val-d-oise/mairie"))
 
   # Récupère les URLs des mairies
-  townhall_urls = page.xpath('//*[@id="result_1"]/div/div/p/a/text()').map { |url| URI.join("https://lannuaire.service-public.fr", url.to_s) }
+  townhall_urls = page.xpath('//p/a/@href').map { |url| URI.join("https://lannuaire.service-public.fr", url.to_s) }
 
 
   #méthode pour définir mon email
@@ -21,6 +21,8 @@ email = email.text.strip if email.any?
 return email # Retourne l'e-mail trouvé
 end
 
+
+townhall_urls = get_townhall_urls
 # On va voir chaque mairie pour chercher l'email
 townhall_urls.each do |url|
 email = get_townhall_email(url) # On utilise la petite boîte magique
